@@ -1,10 +1,9 @@
 // lib/pesapal.ts
 
-const PESAPAL_URL = process.env.PESAPAL_URL; // https://pay.pesapal.com/v3
+const PESAPAL_URL = process.env.PESAPAL_URL;
 const KEY = process.env.PESAPAL_CONSUMER_KEY;
 const SECRET = process.env.PESAPAL_CONSUMER_SECRET;
 
-// 1. Get Authentication Token
 export async function getAuthToken() {
   const res = await fetch(`${PESAPAL_URL}/api/Auth/RequestToken`, {
     method: "POST",
@@ -15,8 +14,6 @@ export async function getAuthToken() {
   return data.token;
 }
 
-// 2. Register IPN (Instant Payment Notification) 
-// You only need to do this once, but we'll make a helper for it.
 export async function registerIPN(token: string) {
   const res = await fetch(`${PESAPAL_URL}/api/URLSetup/RegisterIPN`, {
     method: "POST",
@@ -33,7 +30,6 @@ export async function registerIPN(token: string) {
   return await res.json();
 }
 
-// 3. Submit Order
 export async function submitOrder(token: string, orderData: any) {
   const res = await fetch(`${PESAPAL_URL}/api/Transactions/SubmitOrderRequest`, {
     method: "POST",
