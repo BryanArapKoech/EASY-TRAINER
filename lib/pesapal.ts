@@ -57,3 +57,20 @@ export async function submitOrder(token: string, orderData: any) {
   });
   return await res.json();
 }
+
+// Add this to lib/pesapal.ts
+
+export async function getTransactionStatus(token: string, orderTrackingId: string) {
+  const res = await fetch(
+    `${process.env.PESAPAL_URL}/api/Transactions/GetTransactionStatus?orderTrackingId=${orderTrackingId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
+  );
+  return await res.json();
+}
