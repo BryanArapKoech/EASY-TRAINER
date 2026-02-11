@@ -116,4 +116,26 @@ export default function Home() {
       </div>
     </div>
   )
+
+  const handlePayment = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch('/api/payments/initiate', {
+      method: 'POST',
+      body: JSON.stringify({
+        phone: phoneNumber,
+        unitCode: unit.code,
+        docType: selectedDoc,
+      })
+    });
+    const data = await res.json();
+    if (data.redirect_url) {
+      window.location.href = data.redirect_url; // Send user to Pesapal
+    }
+  } catch (err) {
+    alert("Payment failed to initialize");
+  } finally {
+    setLoading(false);
+  }
+};
 }
