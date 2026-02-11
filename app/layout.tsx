@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/shared/Footer";
+import Navbar from "@/components/shared/Navbar"; // Import the new Navbar
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,18 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} antialiased min-h-screen bg-background`}>
+      <body className={`${inter.className} antialiased min-h-screen bg-white`}>
         <div className="relative flex min-h-screen flex-col">
-          {/* Main Header */}
-          <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container flex h-14 items-center mx-auto px-4">
-              <div className="mr-4 flex">
-                <a className="mr-6 flex items-center space-x-2" href="/">
-                  <span className="font-bold text-xl tracking-tight">Easy Trainer</span>
-                </a>
-              </div>
-            </div>
-          </header>
+          
+          {/* Use the new Mobile-Responsive Navbar instead of the old header */}
+          <Navbar />
 
           {/* Page Content */}
           <main className="flex-1">

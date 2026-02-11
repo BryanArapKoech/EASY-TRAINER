@@ -1,18 +1,20 @@
 // components/shared/Footer.tsx
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+  
   return (
-    <footer className="border-t py-6">
-      <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row mx-auto px-4">
-        <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
-          © {new Date().getFullYear()} Easy Trainer. A craft of{" "}
+    <footer className="py-12 bg-slate-50/30">
+      <div className="container mx-auto px-4 flex flex-col items-center justify-center text-center">
+        <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em] leading-loose">
+          @{currentYear}. Easy Trainer. All Rights Reserved. A Craft of{" "}
           <a
-            href="https://github.com/Tangent-Code-Studios" 
+            href="https://tangentcodestudios.vercel.app"
             target="_blank"
             rel="noreferrer"
-            className="font-medium underline underline-offset-4"
+            className="text-blue-600 hover:text-blue-700 transition-colors"
           >
             Tangent Code Studios
-          </a>.
+          </a>
         </p>
       </div>
     </footer>
