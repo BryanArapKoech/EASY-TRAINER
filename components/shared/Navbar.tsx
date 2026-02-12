@@ -74,6 +74,18 @@ export default function Navbar() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
+              <NavigationMenuItem>
+  <Link href="/" className="px-4 py-2 font-bold text-slate-600 text-sm hover:text-blue-600 transition-colors">
+    Home
+  </Link>
+</NavigationMenuItem>
+
+<NavigationMenuItem>
+  <Link href="/trainerai" className="px-4 py-2 font-bold text-slate-600 text-sm hover:text-blue-600 transition-colors">
+    TrainerAI
+  </Link>
+</NavigationMenuItem>
+
               {/* Departments */}
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="font-bold text-slate-600">Departments</NavigationMenuTrigger>
@@ -115,35 +127,47 @@ export default function Navbar() {
                 <SheetTitle className="font-black text-2xl tracking-tighter">Menu</SheetTitle>
               </SheetHeader>
               
-              <nav className="flex flex-col space-y-6">
-                {/* Mobile Cycles */}
-                <div className="space-y-3">
-                  <p className="font-black text-[10px] uppercase tracking-[0.2em] text-blue-600">Modular Cycles</p>
-                  <div className="grid grid-cols-1 gap-2">
-                    {cycles.map(cycle => (
-                      <Link key={cycle} href="/" onClick={() => setIsOpen(false)} className="text-lg font-bold text-slate-900 hover:text-blue-600">
-                        {cycle}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
+              
+              {/* Mobile Navigation (Sheet) - Replace the mobile nav section inside Navbar.tsx */}
+<nav className="flex flex-col space-y-6">
+  {/* Mobile Cycles */}
+  <div className="space-y-3">
+    <p className="font-black text-[10px] uppercase tracking-[0.2em] text-blue-600">Modular Cycles</p>
+    <div className="grid grid-cols-1 gap-2">
+      {cycles.map(cycle => (
+        <Link 
+          key={cycle} 
+          href={`/cycles/${cycle.toLowerCase().replace(" ", "-")}`} 
+          onClick={() => setIsOpen(false)} 
+          className="text-lg font-bold text-slate-900 hover:text-blue-600"
+        >
+          {cycle}
+        </Link>
+      ))}
+    </div>
+  </div>
 
-                {/* Mobile Departments */}
-                <div className="space-y-3">
-                  <p className="font-black text-[10px] uppercase tracking-[0.2em] text-blue-600">Departments</p>
-                  <div className="grid grid-cols-1 gap-4">
-                    {departments.map(dept => (
-                      <Link key={dept} href="/" onClick={() => setIsOpen(false)} className="text-sm font-bold text-slate-600 hover:text-blue-600 leading-tight">
-                        {dept}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
+  {/* Mobile Departments */}
+  <div className="space-y-3">
+    <p className="font-black text-[10px] uppercase tracking-[0.2em] text-blue-600">Departments</p>
+    <div className="grid grid-cols-1 gap-4">
+      {departments.map(dept => (
+        <Link 
+          key={dept} 
+          href={`/departments/${dept.toLowerCase().replace(/ /g, "-")}`} 
+          onClick={() => setIsOpen(false)} 
+          className="text-sm font-bold text-slate-600 hover:text-blue-600 leading-tight"
+        >
+          {dept}
+        </Link>
+      ))}
+    </div>
+  </div>
 
-                <Link href="/contact" onClick={() => setIsOpen(false)} className="text-lg font-black text-slate-900 border-t pt-4">
-                  Contact Us
-                </Link>
-              </nav>
+  <Link href="/contact" onClick={() => setIsOpen(false)} className="text-lg font-black text-slate-900 border-t pt-4">
+    Contact Us
+  </Link>
+</nav>
             </SheetContent>
           </Sheet>
         </div>
