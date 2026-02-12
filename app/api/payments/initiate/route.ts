@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAuthToken, submitOrder } from "@/lib/pesapal";
 import { createClient } from "@/lib/supabase/server";
+import { metadata } from "@/app/layout";
 
 export async function POST(req: Request) {
   try {
@@ -17,6 +18,7 @@ export async function POST(req: Request) {
       doc_type: docType,
       merchant_reference: merchantReference,
       amount: 25.00, 
+      metadata: metadata // Store weeks, hours, and file URLs here
     });
 
     if (dbError) throw dbError;
