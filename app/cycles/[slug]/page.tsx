@@ -15,9 +15,7 @@ async function CycleContent({ params }: { params: { slug: string } }) {
   return (
     <div className="container mx-auto py-16 px-4 max-w-6xl">
       <div className="text-center mb-16 space-y-4">
-        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-4 py-2 rounded-full">
-          Modular Training
-        </span>
+        
         <h1 className="text-5xl font-black capitalize tracking-tight text-slate-900">{cycleTitle}</h1>
         <p className="text-slate-500 max-w-lg mx-auto font-medium">
           Viewing courses available for Level L4, L5, and L6 within this training cycle.

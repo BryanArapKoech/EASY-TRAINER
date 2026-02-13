@@ -1,3 +1,4 @@
+// app/verify-payment/page.tsx
 "use client"
 
 import { useEffect, useState, Suspense } from 'react'
@@ -79,11 +80,12 @@ function VerifyContent() {
             </div>
 
             <button 
-              onClick={() => router.push('/')} 
+              onClick={() => router.push(`/?completedId=${orderTrackingId}`)} // Points to the new root homepage
               className="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-lg shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all active:scale-[0.98]"
-            >
+                >
               Start AI Generation →
             </button>
+
           </div>
         ) : (
           <div className="space-y-8 animate-in fade-in duration-500">

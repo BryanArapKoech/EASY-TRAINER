@@ -3,39 +3,45 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-export default async function DepartmentDetail({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
-}) {
-  // 1. Await the params (Required in newest Next.js versions)
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function DepartmentDetail({ params }: PageProps) {
+  // 1. Await params (Required in Next.js 15)
   const { slug } = await params;
+  
+  // 2. Convert slug back to name (e.g., "fashion-design" -> "fashion design")
   const deptName = slug.replace(/-/g, " ");
   
-  const supabase = await createClient()
+  const supabase = await createClient();
   
-  // 2. Fetch department
+  // 3. Fetch department with safety
   const { data: dept, error: deptError } = await supabase
     .from('departments')
     .select('*')
-    .ilike('name', deptName)
-    .single()
+    .ilike('name', deptName) // Case-insensitive match
+    .single();
 
-  // 3. Safety Check: If dept is null, show 404 instead of crashing
+  // 4. CRITICAL SAFETY CHECK: If dept wasn't found, show 404 instead of crashing
   if (deptError || !dept) {
+    console.error("Department not found for slug:", slug);
     return notFound();
   }
 
-  // 4. Fetch courses for this dept
+  // 5. Fetch courses only if dept exists
   const { data: courses } = await supabase
     .from('courses')
     .select('*')
-    .eq('dept_id', dept.id)
+    .eq('dept_id', dept.id);
 
   return (
     <div className="container mx-auto py-16 px-4">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-black capitalize">{dept.name}</h1>
+        <Link href="/departments" className="text-blue-600 font-bold text-xs uppercase tracking-widest hover:underline">
+          ← Back to Departments
+        </Link>
+        <h1 className="text-4xl font-black capitalize mt-4 text-slate-900">{dept.name}</h1>
         <p className="text-slate-500 mt-2">Explore the various courses in this department.</p>
       </div>
 
@@ -45,9 +51,10 @@ export default async function DepartmentDetail({
             <div key={course.id} className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all group">
               <div className="h-48 bg-slate-100 relative">
                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                 {/* You can add dynamic images here later */}
               </div>
               <div className="p-8 text-center space-y-4">
-                <h3 className="text-xl font-black text-slate-900 uppercase leading-tight">
+                <h3 className="text-xl font-black text-slate-900 uppercase leading-tight min-h-[3rem]">
                   {course.title}
                 </h3>
                 
@@ -62,7 +69,7 @@ export default async function DepartmentDetail({
 
                 <Link 
                   href={`/units?courseId=${course.id}`}
-                  className="inline-block w-full bg-[#00C2E0] text-white py-3 rounded-xl font-bold hover:bg-blue-600 transition-all"
+                  className="inline-block w-full bg-[#00C2E0] text-white py-4 rounded-xl font-bold hover:bg-slate-900 transition-all"
                 >
                   View Units
                 </Link>
@@ -70,8 +77,8 @@ export default async function DepartmentDetail({
             </div>
           ))
         ) : (
-          <div className="col-span-full text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-             <p className="text-slate-400 font-bold">No courses found for this department.</p>
+          <div className="col-span-full text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
+             <p className="text-slate-400 font-bold uppercase tracking-widest">No courses found for this department yet.</p>
           </div>
         )}
       </div>

@@ -1,35 +1,45 @@
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
 
 export default async function DepartmentsPage() {
   const supabase = await createClient()
-  const { data: depts } = await supabase.from('departments').select('*')
+  
+  // We wrap the fetch in a very simple call
+  const { data: depts, error } = await supabase
+    .from('departments')
+    .select('*')
+    .order('name', { ascending: true })
+
+  // VALIDATION: If there is an error, we show it clearly
+  if (error) {
+    return (
+      <div className="p-20 text-center space-y-4">
+        <h1 className="text-2xl font-bold text-red-600">Connection Error</h1>
+        <p className="text-slate-500">Code: {error.code}</p>
+        <p className="text-slate-500 font-mono text-xs">{error.message}</p>
+        <div className="text-xs bg-slate-100 p-4 rounded">
+          Check if NEXT_PUBLIC_SUPABASE_URL is set in Vercel
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="container mx-auto py-16 px-4">
-      <div className="text-center mb-12 space-y-4">
-        <h1 className="text-4xl font-black tracking-tight">Departments</h1>
-        <p className="text-slate-500 max-w-lg mx-auto">Explore various departments offering specialized TVET training programs.</p>
+    <div className="container mx-auto py-20 px-4 max-w-7xl">
+      <div className="text-center space-y-4 mb-20">
+        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900">Departments</h1>
+        
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {depts?.map((dept) => (
-          <div key={dept.id} className="group bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500">
-            <div className="h-48 bg-slate-100 flex items-center justify-center relative overflow-hidden">
-               {/* Placeholder for images you will upload later */}
-               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent" />
-               <span className="text-4xl">🏢</span>
-            </div>
-            <div className="p-8 text-center space-y-4">
-              <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{dept.name}</h3>
-              <Link 
-                href={`/departments/${dept.name.toLowerCase().replace(/ /g, "-")}`}
-                className="inline-block w-full bg-blue-50 text-blue-600 py-3 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition-all"
-              >
-                View Courses
-              </Link>
-            </div>
-          </div>
+          <Link 
+            key={dept.id} 
+            href={`/departments/${dept.name.trim().toLowerCase().replace(/ /g, "-")}`}
+            className="p-8 border rounded-[2.5rem] bg-white shadow-sm hover:shadow-lg transition-all text-center"
+          >
+            <h3 className="font-black text-slate-900 uppercase text-sm">{dept.name}</h3>
+          </Link>
         ))}
       </div>
     </div>
